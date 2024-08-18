@@ -1,0 +1,41 @@
+chunk_size = 10000
+abod = ABOD()
+all_outlier_scores = []
+all_outlier_predictions = []
+all_reduced_data = []
+for start in range(0, numerical_df.shape[0], chunk_size):
+    end = min(start + chunk_size, numerical_df.shape[0])
+    chunk = numerical_df.iloc[start:end]
+
+    # Normalize the chunk
+
+    # Fit ABOD to the chunk
+    abod.fit(chunk)
+
+    # Get outlier scores and predictions
+    outlier_scores_chunk = abod.decision_function(chunk)
+    outlier_predictions_chunk = abod.predict(chunk)
+
+    # Store results
+    all_outlier_scores.extend(outlier_scores_chunk)
+    all_outlier_predictions.extend(outlier_predictions_chunk)
+    
+    # Perform PCA for the chunk
+    pca = PCA(n_components=2)
+    reduced_data_chunk = pca.fit_transform(chunk)
+    all_reduced_data.append(reduced_data_chunk)
+
+# Combine all results
+all_outlier_scores = np.array(all_outlier_scores)
+all_outlier_predictions = np.array(all_outlier_predictions)
+all_reduced_data = np.vstack(all_reduced_data)
+
+# Plot the outliers and inliers
+plt.figure(figsize=(8, 6))
+colors = np.array(['blue' if pred == 0 else 'red' for pred in all_outlier_predictions])
+plt.scatter(all_reduced_data[:, 0], all_reduced_data[:, 1], c=colors, label='Inliers/Outliers')
+plt.title("ABOD Outlier Detection")
+plt.xlabel("PCA Component 1")
+plt.ylabel("PCA Component 2")
+plt.legend(["Inliers (blue) / Outliers (red)"])
+plt.show()

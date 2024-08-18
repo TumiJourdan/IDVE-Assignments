@@ -1,0 +1,45 @@
+from pyod.models.abod import ABOD
+from pyod.models.iforest import IsolationForest
+from sklearn.decomposition import PCA
+
+
+columns = ['odometer', 'gallons', 'cost_per_gallon_float', 'total_spent_float', 'mpg', 'miles']
+df_top_5 = df[df['currency'].isin(top_5_currencies)]
+df_rest = df[~df['currency'].isin(top_5_currencies)]
+
+country = top_5_currencies[2]
+# Filter the DataFrame for the current currency
+country_df = df_top_5.loc[df_top_5['currency'] == country]
+
+numerical_df = country_df[columns]
+numerical_df = numerical_df.head(33113)
+# problem is at 33113
+start_pos = 30000
+end_pos = 33115
+subset_df = numerical_df.iloc[start_pos:end_pos+1]
+print(subset_df.head(30))
+
+print(numerical_df.iloc[33112])
+print("silly")
+numerical_df = numerical_df.round(decimals=2)
+# Initialize and fit ABOD
+abod = ABOD()
+abod.fit(numerical_df)
+
+
+outlier_scores = abod.decision_function(numerical_df)
+outlier_predictions = abod.predict(numerical_df)
+
+# Perform PCA for 2D visualization
+pca = PCA(n_components=2)
+reduced_data = pca.fit_transform(numerical_df)
+
+# Plot the outliers and inliers
+plt.figure(figsize=(8, 6))
+colors = np.array(['blue' if pred == 0 else 'red' for pred in outlier_predictions])
+plt.scatter(reduced_data[:, 0], reduced_data[:, 1], c=colors, label='Inliers/Outliers')
+plt.title(f"ABOD Outlier Detection for {country}")
+plt.xlabel("PCA Component 1")
+plt.ylabel("PCA Component 2")
+plt.legend(["Inliers (blue) / Outliers (red)"])
+plt.show()
