@@ -1,10 +1,10 @@
-FG%               1 FG/FGA
-3P                1 3P%*3PA
-3P%              13 3P/3PA
-2P%               4 2P/2PA
-eFG%              1 (2P+1.5*3P)FGA
-FT%              23 FT/FTA
-TS%               1 (0.5PTS)/(FGA + 0.475FTA)
-3PAr              1 3PA / FGA
-FTr               1 FTA/FGA
+FG% = FG/FGA
+3P = 3P%*3PA
+3P% = 3P/3PA
+2P% = 2P/2PA
+eFG% = (2P+1.5*3P)FGA
+FT% = FT/FTA
+TS% = (0.5PTS)/(FGA + 0.475FTA)
+3PAr = 3PA / FGA
+FTr = FTA/FGA
 
