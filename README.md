@@ -1,7 +1,7 @@
 
 # Advanced Data Science Course Projects
 
-This repository contains three comprehensive data science projects completed as part of the COMS4060A/7056A course at the University of the Witwatersrand.
+This repository contains three comprehensive data science projects completed as part of the COMS4060A course at the University of the Witwatersrand.
 
 ## Project 1: Fuel Consumption Analysis
 
